@@ -1,6 +1,7 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.Track;
+import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="api/v1")
 public class TrackController {
-
+    private ResponseEntity responseEntity;
     @Autowired
     private TrackService trackService;
 
-    private ResponseEntity responseEntity;
     public void setTrackService(TrackService trackService) {
         this.trackService = trackService;
     }
@@ -48,7 +47,7 @@ public class TrackController {
     public ResponseEntity<?> deleteTrackById(@RequestBody int trackId){
         try{
             responseEntity = new ResponseEntity(trackService.deleteTrackById(trackId), HttpStatus.OK);
-        }catch (Exception e){
+        }catch (TrackNotFoundException e){
             responseEntity = new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
