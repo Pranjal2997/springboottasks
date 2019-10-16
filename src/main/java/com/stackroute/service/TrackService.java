@@ -3,6 +3,7 @@ package com.stackroute.service;
 import com.stackroute.domain.Track;
 import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.IOException;
@@ -18,6 +19,5 @@ public interface TrackService {
 
     public Track updateTrack(Track track);
 
-    @Query("SELECT * FROM TRACK WHERE NAME = ?1")
     public List<Track> findTrackByName(String trackName) throws TrackNotFoundException;
 }

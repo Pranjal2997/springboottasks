@@ -4,17 +4,32 @@ import com.stackroute.domain.Track;
 import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+@Primary
 @Service
+@Profile({"dev", "prod"})
+@PropertySource("classpath:application.properties")
 public class TrackServiceImpl implements TrackService{
+
+    @Autowired
+    private Environment environment;
+
     private TrackRepository trackRepository;
     @Autowired
     public void setTrackRepository(TrackRepository trackRepository) {
@@ -32,7 +47,7 @@ public class TrackServiceImpl implements TrackService{
         try{
             Track savedTrack = trackRepository.save(track);
             return savedTrack;
-        }catch (Exception e){
+        }catch(Exception e){
             throw new TrackAlreadyExistsException("Track already exists");
         }
     }
@@ -63,6 +78,6 @@ public class TrackServiceImpl implements TrackService{
 
     @Override
     public List<Track> findTrackByName(String trackName) throws TrackNotFoundException {
-        return trackRepository.findAll();
+        return trackRepository.findTrackByName(trackName);
     }
 }
