@@ -1,12 +1,10 @@
 package com.stackroute.service;
 
 import com.stackroute.domain.Track;
+import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,15 +23,20 @@ public class TrackServiceImpl implements TrackService{
     }
 
 
+
     @Override
     public List<Track> getAllTracks() {
         return trackRepository.findAll();
     }
 
     @Override
-    public Track saveTrack(Track track) {
-        Track savedTrack = trackRepository.save(track);
-        return savedTrack;
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException {
+        try{
+            Track savedTrack = trackRepository.save(track);
+            return savedTrack;
+        }catch (Exception e){
+            throw new TrackAlreadyExistsException("Track already exists");
+        }
     }
 
     @Override

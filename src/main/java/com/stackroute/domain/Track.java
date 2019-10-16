@@ -1,4 +1,6 @@
 package com.stackroute.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +21,9 @@ public class Track {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int trackId;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("artist")
     private String artist;
     private String trackComments;
 }
