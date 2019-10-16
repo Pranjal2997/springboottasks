@@ -21,7 +21,9 @@ public class Track {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int trackId;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("artist")
     private String artist;
     private String trackComments;
 }

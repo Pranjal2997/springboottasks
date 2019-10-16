@@ -4,14 +4,9 @@ import com.stackroute.domain.Track;
 import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -23,9 +18,9 @@ import java.util.Optional;
 
 @Primary
 @Service
-@Profile({"dev", "prod"})
 @PropertySource("classpath:application.properties")
 public class TrackServiceImpl implements TrackService{
+
 
     @Autowired
     private Environment environment;
@@ -78,6 +73,6 @@ public class TrackServiceImpl implements TrackService{
 
     @Override
     public List<Track> findTrackByName(String trackName) throws TrackNotFoundException {
-        return trackRepository.findTrackByName(trackName);
+        return trackRepository.findAll();
     }
 }
