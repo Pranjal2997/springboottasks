@@ -1,4 +1,5 @@
 package com.stackroute.domain;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +20,7 @@ public class Track {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int trackId;
-
     private String name;
-
     private String artist;
     private String trackComments;
 }
