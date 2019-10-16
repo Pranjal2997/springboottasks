@@ -6,10 +6,7 @@ import com.stackroute.repository.TrackRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +17,6 @@ public class TrackServiceImpl implements TrackService{
     public void setTrackRepository(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }
-
 
 
     @Override
@@ -46,7 +42,7 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public Track updateTrack(Track track) throws TrackNotFoundException {
+    public Track updateTrack(Track track) {
         Optional<Track> savedTrack = trackRepository.findById(track.getTrackId());
         if(savedTrack.isPresent()){
             Track updatedTrack = savedTrack.get();
@@ -54,7 +50,12 @@ public class TrackServiceImpl implements TrackService{
             trackRepository.save(updatedTrack);
             return updatedTrack;
         }else{
-            throw new TrackNotFoundException("Cannot Update track");
+            return null;
         }
+    }
+
+    @Override
+    public List<Track> findTrackByName(String trackName) throws TrackNotFoundException {
+        return trackRepository.findAll();
     }
 }
