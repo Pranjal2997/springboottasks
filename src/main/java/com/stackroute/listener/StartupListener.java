@@ -18,7 +18,7 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent applicationEvent) {
-        trackRepository.save(new Track(1, "Rap God", "Eminem", "Rapgod"));
-        trackRepository.save(new Track(2, "Outside", "Ellie", "fromtheinside"));
+        trackRepository.save(new Track(1, "RapGod", "Eminem", "Rap God"));
+        trackRepository.save(new Track(2, "Outside", "Ellie", "Showfromtheoutside"));
     }
 }
