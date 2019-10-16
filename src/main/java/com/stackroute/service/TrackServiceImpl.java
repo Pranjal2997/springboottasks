@@ -4,9 +4,14 @@ import com.stackroute.domain.Track;
 import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -18,9 +23,13 @@ import java.util.Optional;
 
 @Primary
 @Service
+@Profile("dev")
 @PropertySource("classpath:application.properties")
 public class TrackServiceImpl implements TrackService{
-
+    @Value("${api.key}")
+    private String apiKey;
+    @Value("${lastfm.suffix}")
+    private String urlSuffix;
 
     @Autowired
     private Environment environment;
@@ -31,6 +40,25 @@ public class TrackServiceImpl implements TrackService{
         this.trackRepository = trackRepository;
     }
 
+    @Override
+    public List<Track> searchTrack(String trackName) throws ParseException {
+        final String uri=environment.getProperty("lastfm.prefix") + trackName + "&api_key=" + apiKey + urlSuffix;
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(uri, String.class);
+        //Process JSON
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
+        JSONObject results = (JSONObject)jsonParser.parse(jsonObject.get("results").toString());
+        JSONObject trackMatches = (JSONObject)results.get("trackmatches");
+        JSONArray tracks = (JSONArray) trackMatches.get("track");
+
+        List<Track> trackList = new ArrayList<Track>();
+        for(int i = 0; i < tracks.size(); i++){
+            JSONObject currentTrack = (JSONObject)tracks.get(i);
+            trackList.add(new Track(i, (String)currentTrack.get("name"), (String)currentTrack.get("artist"), ""));
+        }
+        return trackList;
+    }
 
     @Override
     public List<Track> getAllTracks() {
