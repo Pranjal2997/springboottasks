@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Primary
 @Service
-@Profile("dev")
+@Profile({"dev", "prod"})
 @PropertySource("classpath:application.properties")
 public class TrackServiceImpl implements TrackService{
     @Value("${api.key}")
@@ -34,8 +34,8 @@ public class TrackServiceImpl implements TrackService{
     @Autowired
     private Environment environment;
 
-    private TrackRepository trackRepository;
     @Autowired
+    private TrackRepository trackRepository;
     public void setTrackRepository(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }
@@ -77,18 +77,18 @@ public class TrackServiceImpl implements TrackService{
 
     @Override
     public Track deleteTrackById(int trackId) throws TrackNotFoundException{
-        Optional<Track > track = trackRepository.findById(trackId);
-        if (track.isPresent()){
+        try{
+            Optional<Track> savedTrack = trackRepository.findById(trackId);
             trackRepository.deleteById(trackId);
-            return track.get();
-        }else{
+            return savedTrack.get();
+        }catch (Exception e){
             throw new TrackNotFoundException("Cannot find track");
         }
     }
 
     @Override
     public Track updateTrack(Track track) {
-        Optional<Track> savedTrack = trackRepository.findById(track.getTrackId());
+        Optional<Track> savedTrack = trackRepository.findById(track.get_id());
         if(savedTrack.isPresent()){
             Track updatedTrack = savedTrack.get();
             updatedTrack.setTrackComments(track.getTrackComments());
@@ -101,6 +101,6 @@ public class TrackServiceImpl implements TrackService{
 
     @Override
     public List<Track> findTrackByName(String trackName) throws TrackNotFoundException {
-        return trackRepository.findAll();
+        return trackRepository.findByNameLike(trackName);
     }
 }

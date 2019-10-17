@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Api(value = "Muzix Track Management System.", description = "Operations pertaining to Track in Track Management System")
+@Api(value = "Muzix Track Management System.")
 public class TrackController {
     private ResponseEntity responseEntity;
     @Autowired

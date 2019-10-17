@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CommandLineStartupRunner implements CommandLineRunner {
-    private TrackRepository trackRepository;
     @Autowired
+    private TrackRepository trackRepository;
+
     public void setTrackRepository(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }

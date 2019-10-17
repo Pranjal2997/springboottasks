@@ -9,15 +9,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StartupListener implements ApplicationListener<ContextRefreshedEvent> {
-    private TrackRepository trackRepository;
     @Autowired
+    private TrackRepository trackRepository;
+
     public void setTrackRepository(TrackRepository trackRepository) {
         this.trackRepository = trackRepository;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent applicationEvent) {
-        trackRepository.save(new Track(1, "Edge of Desire", "John Mayer", "From Battle Studies"));
-        trackRepository.save(new Track(2, "Hello", "Adele", "Hellofromtheothersideeee"));
+        trackRepository.save(new Track(1, "Rap god", "Eminem", "Rap God"));
+        trackRepository.save(new Track(2, "Outside", "Ellie", "Hellofromtheoutside"));
     }
 }
